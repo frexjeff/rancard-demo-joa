@@ -11,7 +11,7 @@ RUN chown -R gradle /home/gradle/src
 
 RUN gradle build || return 0
 COPY . .
-RUN gradle clean build -x test
+RUN gradle clean build
 
 # actual container
 FROM eclipse-temurin:11

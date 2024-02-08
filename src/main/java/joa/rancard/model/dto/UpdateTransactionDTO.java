@@ -32,7 +32,4 @@ public class UpdateTransactionDTO {
     @With
     @JsonSerialize(using = MoneySerializer.class)
     private BigDecimal amount;
-
-    @PastOrPresent(message = "Date must be in the past or present")
-    private LocalDate transactionDate;
 }

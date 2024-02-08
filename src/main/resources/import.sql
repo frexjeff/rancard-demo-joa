@@ -1,3 +1,4 @@
-INSERT INTO users(user_id, username) VALUES (null, "User 1");
-INSERT INTO users(user_id, username) VALUES (null, "User 2");
-INSERT INTO users(user_id, username) VALUES (null, "User 3");
+ -- insert script
+insert into users (username) values('User 1');
+insert into users (username) values('User 2');
+insert into users (username) values('User 3');

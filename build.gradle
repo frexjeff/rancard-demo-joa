@@ -34,6 +34,14 @@ dependencies {
 	testImplementation 'com.h2database:h2'
 }
 
+test {
+	// Configure test logging
+	testLogging {
+		// Set the log level for test output
+		events 'passed', 'skipped', 'failed'
+	}
+}
+
 tasks.named('test') {
 	useJUnitPlatform()
 }

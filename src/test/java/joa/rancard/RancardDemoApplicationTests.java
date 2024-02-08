@@ -89,7 +89,7 @@ class RancardDemoApplicationTests {
 //    private Validator validator; // Mock the validator bean
 
     @Test
-    public void testGetById() throws Exception {
+    void testGetById() throws Exception {
 
         Mockito.when(transactionService.get(anyLong())).thenReturn(
                 TRANSACTION);
@@ -109,7 +109,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void testGetAll() throws Exception {
+    void testGetAll() throws Exception {
         var TRANSACTION_DTO_LIST = TRANSACTION_LIST.stream().map(Transform::toDTO).collect(Collectors.toList());
 
         Mockito.when(transactionService.get()).thenReturn(
@@ -122,7 +122,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void testFilterIsValid() throws Exception {
+    void testFilterIsValid() throws Exception {
         FilterTransactionDTO f = FilterTransactionDTO.builder()
                 .page(1)
                 .size(1)
@@ -145,7 +145,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPostForValidTransaction() throws Exception {
+    void checkPostForValidTransaction() throws Exception {
         var transDTO = TransactionDTO.builder()
                 .sender(User.builder()
                         .userId(2L)
@@ -171,7 +171,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPostNullReceiverIsValidated() throws Exception {
+    void checkPostNullReceiverIsValidated() throws Exception {
         var transDTO = TransactionDTO.builder()
                 .sender(User.builder()
                         .userId(2L)
@@ -190,7 +190,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPostNullSenderIsValidated() throws Exception {
+    void checkPostNullSenderIsValidated() throws Exception {
         var transDTO = TransactionDTO.builder()
                 .receiver(User.builder()
                         .userId(1L)
@@ -208,7 +208,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPostTransactionDateIsValidated() throws Exception {
+    void checkPostTransactionDateIsValidated() throws Exception {
         var transDTO = TransactionDTO.builder()
                 .sender(User.builder()
                         .userId(2L)
@@ -233,7 +233,7 @@ class RancardDemoApplicationTests {
     //PUT Test
 
     @Test
-    public void checkPutForValidTransaction() throws Exception {
+    void checkPutForValidTransaction() throws Exception {
 
         BigDecimal originalValue = new BigDecimal("200.00");
         BigDecimal amount = originalValue.setScale(2, RoundingMode.HALF_UP);
@@ -249,7 +249,6 @@ class RancardDemoApplicationTests {
                         .username("R1")
                         .build())
                 .amount(amount)
-                .transactionDate(LocalDate.now())
                 .build();
 
         Mockito.when(transactionService.update(any()))
@@ -264,7 +263,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPut_For_NullReceiverIsValidated() throws Exception {
+    void checkPut_For_NullReceiverIsValidated() throws Exception {
         var updateTransDTO = UpdateTransactionDTO.builder()
                 .transId(1L)
                 .sender(User.builder()
@@ -272,7 +271,6 @@ class RancardDemoApplicationTests {
                         .username("S1")
                         .build())
                 .amount(new BigDecimal("200.00"))
-                .transactionDate(LocalDate.now())
                 .build();
         System.out.println(objectMapper.writeValueAsString(updateTransDTO));
 
@@ -284,7 +282,7 @@ class RancardDemoApplicationTests {
     }
 
     @Test
-    public void checkPut_For_NullSenderIsValidated() throws Exception {
+    void checkPut_For_NullSenderIsValidated() throws Exception {
         var updateTransDTO = UpdateTransactionDTO.builder()
                 .transId(1L)
                 .receiver(User.builder()
@@ -292,7 +290,6 @@ class RancardDemoApplicationTests {
                         .username("R1")
                         .build())
                 .amount(new BigDecimal("200.00"))
-                .transactionDate(LocalDate.now())
                 .build();
         System.out.println(objectMapper.writeValueAsString(updateTransDTO));
 
@@ -301,29 +298,6 @@ class RancardDemoApplicationTests {
                         .content(objectMapper.writeValueAsString(updateTransDTO)))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.sender").value("sender is required"));
-    }
-
-    //
-    @Test
-    public void checkPut_For_TransactionDateIsValidated() throws Exception {
-        var transDTO = TransactionDTO.builder()
-                .sender(User.builder()
-                        .userId(2L)
-                        .username("S1")
-                        .build())
-                .receiver(User.builder()
-                        .userId(1L)
-                        .username("R1")
-                        .build())
-                .amount(new BigDecimal("100.00"))
-                .transactionDate(LocalDate.parse("2025-01-01"))
-                .build();
-
-        mockMvc.perform(put("/api/v1/transaction")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(transDTO)))
-                .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.transactionDate").value("Date must be in the past or present"));
     }
 
     @Test

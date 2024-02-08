@@ -21,6 +21,7 @@ public class Transform {
                 .receiver(transaction.getReceiver())
                 .transactionDate(transaction.getTransactionDate())
                 .amount(transaction.getAmount())
+                .transactionDate(transaction.getTransactionDate())
                 .build();
     }
 
@@ -29,7 +30,6 @@ public class Transform {
                 .transId(transaction.getTransId())
                 .sender(transaction.getSender())
                 .receiver(transaction.getReceiver())
-                .transactionDate(transaction.getTransactionDate())
                 .amount(transaction.getAmount())
                 .build();
     }

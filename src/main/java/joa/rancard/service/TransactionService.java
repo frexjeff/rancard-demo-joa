@@ -3,7 +3,6 @@ package joa.rancard.service;
 import joa.rancard.commons.Transform;
 import joa.rancard.exception.TransactionNotFoundException;
 import joa.rancard.model.Transaction;
-import joa.rancard.model.User;
 import joa.rancard.model.dto.FilterTransactionDTO;
 import joa.rancard.model.dto.TransactionDTO;
 import joa.rancard.model.dto.UpdateTransactionDTO;
@@ -15,11 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
-import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -54,7 +49,8 @@ public class TransactionService {
 
     public Transaction update(UpdateTransactionDTO updateTransactionDTO) {
         Transaction transaction = Transform.fromDTO(updateTransactionDTO);
-        return transactionRepository.save(transaction);
+        transaction = transactionRepository.save(transaction);
+        return get(transaction.getTransId());
     }
 
     public void delete(Long id) {

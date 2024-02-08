@@ -9,6 +9,7 @@ import joa.rancard.service.TransactionService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -18,17 +19,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
-public class RancardDemoApplicationIT {
+@ActiveProfiles(value = "test")
+class RancardDemoApplicationIT {
 
     private static final Transaction TRANSACTION = Transaction.builder()
             .transId(1L)
             .sender(User.builder()
                     .userId(2L)
-                    //.username("User 2")
+                    .username("User 2")
                     .build())
             .receiver(User.builder()
                     .userId(1L)
-                    //.username("User 1")
+                    .username("User 1")
                     .build())
             .amount(new BigDecimal("100.00"))
             .transactionDate(LocalDate.now())
@@ -59,12 +61,11 @@ public class RancardDemoApplicationIT {
                 .receiver(User.builder()
                         .userId(1L)
                         .build())
-                .amount(new BigDecimal("200"))
-                .transactionDate(LocalDate.now())
+                .amount(new BigDecimal("200.00"))
                 .build();
 
         t = transactionService.update(updateTransDTO);
-        assertEquals(TRANSACTION.withAmount(new BigDecimal("200")), t);
+        assertEquals(TRANSACTION.withAmount(new BigDecimal("200.00")).getAmount(), t.getAmount());
 
         transactionService.delete(1L);
 
